@@ -1,12 +1,12 @@
-// fn main() -> Result<(), Box<dyn std::error::Error>> {
-// tonic_build::compile_protos("proto/echo.proto")?;
-// Ok(());
-// }
+use std::env;
+use std::path::PathBuf;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let out_dir = PathBuf::from(env::var("OUT_DIR").unwrap());
+
     tonic_build::configure()
-        .build_server(false)
-        .out_dir("proto/")
-        .compile(&["proto/echo.proto"], &["proto/"])?;
+        .file_descriptor_set_path(out_dir.join("echo_descriptor.bin"))
+        .compile(&["proto/echo.proto"], &["proto"])?;
+
     Ok(())
 }
